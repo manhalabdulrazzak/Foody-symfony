@@ -3,17 +3,25 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-5">
-            <img class="img-fluid" src="/uploads/product{{product.productImage}}" alt="{{product.name}}">
+    <div class="col-md-8">
+        <h1 class="mt-4 mt-md-0">{{ product.name }}</h1>
+        <img class="img-fluid" src="/uploads/product{{product.productImage}}" alt="{{product.name}}">
+        <h2>{{ product.price }} KD</h2>
+        <hr>
+        <b>Description: </b>{{ product.description }}
+        {{ form_start(form, {'attr': {'class': 'mt-4 p-4 bg-light'}}) }}
+        <div class="form-group">
+            {{ form_label(form.quantity) }}
+            {{ form_widget(form.quantity, {
+                'attr': {
+                    'class': 'form-control ' ~ (form.quantity.vars.valid ? '' : 'is-invalid')
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.quantity) }}
+            </div>
         </div>
-        <div class="col-md-7 my-auto">
-            <h3>{{product.name}}</h3>
-            <p>{{product.description}}</p>
-            <span class="product-price">{{(product.price / 100 )|number_format(3,',', '.')}}KD </span>
-            <hr>
-            <p>{{product.description}}</p>
-            <button class="btn btn-warning">Add to Cart</button>
-        </div>
+        {{ form_widget(form.add, {'attr': {'class': 'btn btn-warning w-25'}}) }}
+        {{ form_end(form) }}
     </div>
 {% endblock %}

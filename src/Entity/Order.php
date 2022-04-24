@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Order
 {
 
-    const STATUS_CART = 'cart';
 
     // ...
     #[ORM\Id]
@@ -20,16 +20,9 @@ class Order
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $status = self::STATUS_CART;
 
-    /**
-     * @var string
-     */
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
+    private  $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private $updatedAt;
@@ -37,7 +30,17 @@ class Order
     /**
      * @ORM\OneToMany(targetEntity=OrderItem::class, mappedBy="orderRef", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private $items;
+    private ArrayCollection $items;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $status = self::STATUS_CART;
+
+    /**
+     * An order that is in progress, not placed yet.
+     *
+     * @var string
+     */
+    public const STATUS_CART = 'cart';
 
     public function __construct()
     {
@@ -62,24 +65,24 @@ class Order
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): string
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt( $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt( $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

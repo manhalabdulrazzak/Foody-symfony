@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
 class OrderItem
@@ -16,7 +17,11 @@ class OrderItem
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'orderItems')]
     private $product;
 
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\GreaterThanOrEqual(1)
+     */
     private $quantity;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'items')]

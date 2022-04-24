@@ -7,10 +7,6 @@ use App\Factory\OrderFactory;
 use App\Storage\CartSessionStorage;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Class CartManager
- * @package App\Manager
- */
 class CartManager
 {
     /**
@@ -30,10 +26,6 @@ class CartManager
 
     /**
      * CartManager constructor.
-     *
-     * @param CartSessionStorage $cartStorage
-     * @param OrderFactory $orderFactory
-     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         CartSessionStorage $cartStorage,
@@ -45,12 +37,22 @@ class CartManager
         $this->entityManager = $entityManager;
     }
 
-    // ...
+    /**
+     * Gets the current cart.
+     */
+    public function getCurrentCart(): Order
+    {
+        $cart = $this->cartSessionStorage->getCart();
+
+        if (!$cart) {
+            $cart = $this->cartFactory->create();
+        }
+
+        return $cart;
+    }
 
     /**
      * Persists the cart in database and session.
-     *
-     * @param Order $cart
      */
     public function save(Order $cart): void
     {
